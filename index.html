@@ -301,45 +301,45 @@
         </div>
     </footer>
 <script>
-    // Siguroha nga ang imong input tag naa gyud id="domainInput"
-    const domainInput = document.getElementById('domainInput');
-    const searchButton = document.getElementById('searchButton');
-    const resultContainer = document.getElementById('resultContainer');
+    document.addEventListener('DOMContentLoaded', () => {
+        const domainInput = document.getElementById('domainInput');
+        const searchButton = document.getElementById('searchButton');
+        const resultContainer = document.getElementById('resultContainer');
 
-    async function performSearch() {
-        const domainName = domainInput.value.trim();
-        
-        if(!domainName) {
-            alert("Please type a domain name first!");
+        if (!domainInput || !searchButton) {
+            console.error("Wala nakit-an ang input o button sa page!");
             return;
         }
 
-        searchButton.innerText = "Checking...";
-        searchButton.disabled = true;
+        async function performSearch() {
+            const domainName = domainInput.value.trim();
+            if(!domainName) { alert("Please type a domain!"); return; }
 
-        try {
-            const response = await fetch('https://cheapdomains-backend.onrender.com/api/search', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ domain: domainName }),
-            });
+            searchButton.innerText = "Checking...";
+            searchButton.disabled = true;
 
-            const data = await response.json();
+            try {
+                const response = await fetch('https://cheapdomains-backend.onrender.com/api/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ domain: domainName }),
+                });
 
-            resultContainer.classList.remove('hidden');
-            resultContainer.className = "max-w-3xl mx-auto mt-4 p-4 rounded-xl text-center font-bold " + (data.available ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800");
-            resultContainer.innerText = data.message;
-        } catch (error) {
-            console.error("Error:", error);
-            alert("Backend error. Check console!");
-        } finally {
-            searchButton.innerText = "Search";
-            searchButton.disabled = false;
+                const data = await response.json();
+                resultContainer.classList.remove('hidden');
+                resultContainer.className = "max-w-3xl mx-auto mt-4 p-4 rounded-xl text-center font-bold " + (data.available ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800");
+                resultContainer.innerText = data.message;
+            } catch (error) {
+                alert("Error connecting to backend!");
+            } finally {
+                searchButton.innerText = "Search";
+                searchButton.disabled = false;
+            }
         }
-    }
 
-    searchButton.addEventListener('click', performSearch);
-    domainInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
+        searchButton.addEventListener('click', performSearch);
+        domainInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
+    });
 </script>
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();

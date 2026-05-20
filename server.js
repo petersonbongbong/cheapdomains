@@ -2,17 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const dns = require('dns');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
-// Gitugotan niini nga makakonektar ang imong Netlify site
-app.use(cors({
-    origin: '*',
-    methods: ['POST', 'GET'],
-    allowedHeaders: ['Content-Type']
-}));
-
+// Middleware
+app.use(cors({ origin: '*', methods: ['POST', 'GET'], allowedHeaders: ['Content-Type'] }));
 app.use(express.json());
 
+// API Route
 app.post('/api/search', (req, res) => {
     let { domain } = req.body;
     
@@ -39,6 +35,7 @@ app.post('/api/search', (req, res) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// Usa lang ka app.listen!
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server is running on port ${PORT}`);
 });
